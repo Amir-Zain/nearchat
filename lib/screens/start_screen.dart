@@ -4,11 +4,12 @@ import 'package:nearchat/constants.dart';
 import 'package:nearchat/screens/login/login_screen.dart';
 import 'package:nearchat/screens/signup/signup_screen.dart';
 import 'package:nearchat/ui/theme/appcolors.dart';
+import 'package:sizer/sizer.dart';
 
 import '../ui/textfield.dart';
 
 class StartScreen extends StatefulWidget {
-  static const String id = 'start_screen';
+  static const String routeName = 'start_screen';
 
   const StartScreen({super.key});
 
@@ -41,14 +42,15 @@ class _StartScreenState extends State<StartScreen> {
                     // width: double.maxFinite,
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                         colors: [
                           AppColor.primaryColorD1,
                           AppColor.primaryColorD0,
                           AppColor.primaryColor,
                           AppColor.primaryColorL1,
-                          AppColor.primaryColorL0,
+                          AppColor.mixColor,
+                          AppColor.secondayColor,
                           // AppColor.primaryColorlight,
                         ],
                       ),
@@ -57,9 +59,23 @@ class _StartScreenState extends State<StartScreen> {
                   Column(
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SvgPicture.asset("assets/svg/Online world-bro.svg"),
+                      SvgPicture.asset(
+                        "assets/svg/Online world-bro.svg",
+                      ),
+                      Container(
+                        width: 100.w,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Constants.screenWidth / 13),
+                        child: Text(
+                          "Chat with confidence, connect with comfort, and be yourself. Make every chat a new adventure",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11.5.sp,
+                          ),
+                        ),
+                      ),
                       SizedBox(
-                        height: Constants.screenHeight * 0.1,
+                        height: 5.h,
                       ),
                       Column(
                         children: [
@@ -69,7 +85,8 @@ class _StartScreenState extends State<StartScreen> {
                                 horizontal: Constants.screenWidth / 7),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, LoginScreen.id);
+                                Navigator.popAndPushNamed(
+                                    context, LoginScreen.routeName);
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColor.primaryColor,
@@ -94,7 +111,8 @@ class _StartScreenState extends State<StartScreen> {
                                 horizontal: Constants.screenWidth / 7),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, SignUpScreen.id);
+                                Navigator.popAndPushNamed(
+                                    context, SignUpScreen.routeName);
                               },
                               style: ElevatedButton.styleFrom(
                                 elevation: 0,

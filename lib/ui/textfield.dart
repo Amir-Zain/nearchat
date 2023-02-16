@@ -1,33 +1,52 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:nearchat/ui/theme/appcolors.dart';
 
 class TextFieldCustom extends StatelessWidget {
   final String hint;
   IconData? icon;
-  bool onlyRead = false;
+
+  bool onlyRead;
+  bool obscured;
   TextEditingController? controller;
+  AutovalidateMode validation;
+  bool onClick;
+  Function()? notifyParentIconCLicl;
   final int maxLine;
-  TextFieldCustom(
-      {Key? key,
-      this.hint = "",
-      this.maxLine = 1,
-      this.icon,
-      this.controller,
-      this.onlyRead = false})
-      : super(key: key);
+  TextFieldCustom({
+    Key? key,
+    this.hint = "",
+    this.maxLine = 1,
+    this.icon,
+    this.controller,
+    this.validation = AutovalidateMode.disabled,
+    this.onClick = false,
+    this.obscured = false,
+    this.onlyRead = false,
+    this.notifyParentIconCLicl,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: onClick ? validation : AutovalidateMode.disabled,
       controller: controller,
       readOnly: onlyRead,
+      obscureText: obscured,
       maxLines: maxLine,
+      validator: (value) =>
+          EmailValidator.validate(value!) ? null : "Please enter a valid email",
       decoration: InputDecoration(
+          isDense: true,
           suffixIcon: icon != null
-              ? Icon(
-                  icon,
-                  size: 27,
-                  color: AppColor.primaryColor,
+              ? InkWell(
+                  onTap: notifyParentIconCLicl,
+                  child: Icon(
+                    icon,
+                    size: 27,
+                    color: AppColor.primaryColor,
+                  ),
                 )
               : null,
           focusedBorder: OutlineInputBorder(
