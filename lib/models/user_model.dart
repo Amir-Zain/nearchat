@@ -3,31 +3,40 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class ChatUser {
   String? name;
-
   String? uid;
-
   String? email;
-
-  // String? profilepic;
+  String? avatar;
+  String? discription;
+  String? interests;
+  String? age;
 
   ChatUser({
     this.email,
     this.uid,
-    // this.profilepic,
+    this.avatar,
     this.name,
+    this.discription,
+    this.interests,
+    this.age,
   });
   factory ChatUser.fromJson(Map<String, dynamic> parsedJson) {
     return ChatUser(
       uid: parsedJson['uid'].toString(),
       name: parsedJson['name'].toString(),
       email: parsedJson['email'].toString(),
-      // profilepic: parsedJson['profilepic'].toString()
+      avatar: parsedJson['avatar'].toString(),
+      discription: parsedJson['discription'].toString(),
+      interests: parsedJson['interests'].toString(),
+      age: parsedJson['age'].toString(),
     );
   }
   Map<String, dynamic> toJson() => {
         "uid": uid,
         "name": name,
         "email": email,
-        // "profilepic": profilepic,
+        "avatar": avatar,
+        "discription": discription,
+        "interests": interests,
+        "age": age,
       };
 }

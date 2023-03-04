@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +61,20 @@ class AuthService {
     }
   }
 
+  Future logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+    } on FirebaseAuthException catch (exception) {
+      Fluttertoast.showToast(
+        msg: exception.code.toString(),
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+    }
+  }
+
   Future forgetPassword(String email) async {
     var credential;
     try {
@@ -92,14 +108,14 @@ class AuthService {
     }
     if (credential != null) {
       String uid = credential.user!.uid;
-      DocumentSnapshot userData =
+      DocumentSnapshot data =
           await FirebaseFirestore.instance.collection("users").doc(uid).get();
       ChatUser loginUser =
-          ChatUser.fromJson(userData.data() as Map<String, dynamic>);
+          ChatUser.fromJson(data.data() as Map<String, dynamic>);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("email", loginUser.email.toString());
+      String userData = jsonEncode(loginUser.toJson());
+      prefs.setString("userData", userData);
       return "Success";
-      //kk Navigator.push( context, MaterialPageRoute( builder: (context) => HomePage( chatUser: loginUser, firestoreuser: credential!.user!,)),);
     } else {
       Fluttertoast.showToast(
         msg: "Email/Password is incorrect",

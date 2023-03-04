@@ -6,7 +6,7 @@ import 'package:nearchat/ui/theme/appcolors.dart';
 class TextFieldCustom extends StatelessWidget {
   final String hint;
   IconData? icon;
-
+  TextInputType inputType;
   bool onlyRead;
   bool obscured;
   TextEditingController? controller;
@@ -21,6 +21,7 @@ class TextFieldCustom extends StatelessWidget {
     this.icon,
     this.controller,
     this.validation = AutovalidateMode.disabled,
+    this.inputType = TextInputType.text,
     this.onClick = false,
     this.obscured = false,
     this.onlyRead = false,
@@ -35,6 +36,7 @@ class TextFieldCustom extends StatelessWidget {
       readOnly: onlyRead,
       obscureText: obscured,
       maxLines: maxLine,
+      keyboardType: inputType,
       validator: (value) =>
           EmailValidator.validate(value!) ? null : "Please enter a valid email",
       decoration: InputDecoration(

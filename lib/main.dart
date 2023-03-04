@@ -1,11 +1,18 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
+import 'package:nearchat/models/user_model.dart';
 import 'package:nearchat/screens/forget-password/forgetPassword_screen.dart';
+import 'package:nearchat/screens/home/edit_profile_screen.dart';
 import 'package:nearchat/screens/home/home_screen.dart';
+import 'package:nearchat/screens/home/profile_screen.dart';
 import 'package:nearchat/screens/login/login_screen.dart';
 import 'package:nearchat/screens/signup/signup_screen.dart';
 import 'package:nearchat/screens/start_screen.dart';
@@ -21,23 +28,46 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var email = prefs.getString('email');
-  print(email);
-  // email = null;
+  var userId = prefs.getString('userData');
   runApp(MyApp(
-    initialScreen: email == null ? StartScreen.routeName : HomeScreen.routeName,
+    initialScreen:
+        userId == null ? StartScreen.routeName : HomeScreen.routeName,
   ));
 }
 
 class MyApp extends StatelessWidget {
+  List names = ["amir", "fahis"];
+
   final String initialScreen;
-  const MyApp({
+  final logger = Logger(
+      printer: PrettyPrinter(
+    methodCount: 0,
+    errorMethodCount: 5,
+    lineLength: 50,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ));
+  MyApp({
     required this.initialScreen,
     super.key,
   });
+  getData() async {
+    CollectionReference _collection =
+        FirebaseFirestore.instance.collection("users");
+    QuerySnapshot querySnapshot = await _collection.get();
+    final alldata = querySnapshot.docs.map((e) => e.data());
+    List<ChatUser> allUsers = alldata
+        .map((e) => ChatUser.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    // DocumentSnapshot userData = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    // ChatUser loginUser = ChatUser.fromJson(userData.data() as Map<String, dynamic>);
+  }
 
   @override
   Widget build(BuildContext context) {
+    // getData();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -48,9 +78,12 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(fontFamily: 'Nunito'),
+          builder: EasyLoading.init(),
           initialRoute: initialScreen,
           routes: {
             StartScreen.routeName: (context) => const StartScreen(),
+            EditProfileScreen.routeName: (context) => const EditProfileScreen(),
+            ProfileScreen.routeName: (context) => const ProfileScreen(),
             LoginScreen.routeName: (context) => const LoginScreen(),
             SignUpScreen.routeName: (context) => const SignUpScreen(),
             ForgetPasswordScreen.routeName: (context) =>

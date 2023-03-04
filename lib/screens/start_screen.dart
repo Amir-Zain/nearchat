@@ -85,7 +85,7 @@ class _StartScreenState extends State<StartScreen> {
                                 horizontal: Constants.screenWidth / 7),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.popAndPushNamed(
+                                Navigator.pushNamed(
                                     context, LoginScreen.routeName);
                               },
                               style: ElevatedButton.styleFrom(
@@ -111,7 +111,7 @@ class _StartScreenState extends State<StartScreen> {
                                 horizontal: Constants.screenWidth / 7),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.popAndPushNamed(
+                                Navigator.pushNamed(
                                     context, SignUpScreen.routeName);
                               },
                               style: ElevatedButton.styleFrom(
